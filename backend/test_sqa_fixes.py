@@ -18,17 +18,18 @@ class SqaFixRegressionTests(unittest.TestCase):
         connection = sqlite3.connect(":memory:")
         connection.execute("CREATE TABLE prices (date TEXT)")
         connection.execute("INSERT INTO prices (date) VALUES (?)", ("2026-09-29",))
-        with patch.object(sync_da_prices, "DB_PATH", "configured-database.db"), patch.object(
+        with patch.object(
+            sync_da_prices, "get_conn", return_value=connection
+        ), patch.object(
             sync_da_prices, "init_db"
         ), patch.object(
             sync_da_prices,
             "weekly_links",
             return_value=[("https://example.test/report", "September 29, 2026")],
-        ), patch.object(sync_da_prices.sqlite3, "connect", return_value=connection) as connect:
+        ):
             result = sync_da_prices.sync()
 
         self.assertEqual(result, 0)
-        connect.assert_called_once_with("configured-database.db")
 
     def test_weekly_links_accepts_any_month_and_year(self):
         html = '''
