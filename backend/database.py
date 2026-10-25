@@ -15,7 +15,7 @@ USE_POSTGRES = bool(DATABASE_URL)
 def get_conn():
     """Returns DB-API connection. Postgres when DATABASE_URL set, else SQLite fallback."""
     if USE_POSTGRES:
-        import psycopg  # psycopg[binary] >=3.1
+        import psycopg2.binary as psycopg  # psycopg2-binary >=2.9.9
         return psycopg.connect(DATABASE_URL)
     conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     return conn
