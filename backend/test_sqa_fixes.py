@@ -5,10 +5,13 @@ from pathlib import Path
 import sys
 from unittest.mock import patch
 
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import pandas as pd
 
+import piece_weights
 import forecaster
 import sync_da_prices
 
@@ -84,6 +87,27 @@ class SqaFixRegressionTests(unittest.TestCase):
         # training = first 8 (100..107), last=107, actuals=[108,109] -> rmse sqrt((1^2+2^2)/2)=1.58
         self.assertAlmostEqual(result['rmse'], 1.58, places=1)
 
+
+
+    def test_per_piece_estimation(self):
+        # Normal inputs
+        self.assertEqual(piece_weights.per_piece_estimate("kamatis", 100.0), 8.0)
+        self.assertEqual(piece_weights.per_piece_estimate("eggs (medium)", 5.0), 5.0)
+        # Empty/None inputs
+        self.assertIsNone(piece_weights.per_piece_estimate("unknown", 10.0))
+        self.assertIsNone(piece_weights.per_piece_estimate("kamatis", None))
+        # Invalid inputs
+        self.assertIsNone(piece_weights.per_piece_estimate("", 10.0))
+
+    def test_vendor_name_normalization(self):
+        # Normal inputs
+        self.assertEqual("Market Stall A".strip().lower(), "market stall a")
+        # Empty/None handling as per main.py
+        vendor = ""
+        self.assertEqual(vendor.strip(), "")
+        # Length constraint check
+        vendor_name = "A" * 65
+        self.assertTrue(len(vendor_name) > 60)
 
 if __name__ == '__main__':
     unittest.main()

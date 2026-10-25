@@ -1,3 +1,4 @@
+import 'palengke_splash.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -105,7 +106,15 @@ class PalengkePlusApp extends StatelessWidget {
         ),
       ),
     ),
-    home: const Shell(),
+    home: Builder(
+      builder: (context) => PalengkeSplash(
+        onFinished: () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const Shell()),
+          );
+        },
+      ),
+    ),
   );
 }
 
@@ -127,11 +136,7 @@ class _ShellState extends State<Shell> {
     final p=await SharedPreferences.getInstance();
     setState((){role=p.getString('palengke_role')??'consumer'; vendorUser=p.getString('palengke_vendor_user')??'';});
   }
-  Future<void> _setRole(String r) async {
-    final p=await SharedPreferences.getInstance();
-    await p.setString('palengke_role', r);
-    setState(()=>role=r);
-  }
+
 
   void openServerSettings() {
     final controller = TextEditingController(text: ApiService.activeBaseUrl);
@@ -205,7 +210,7 @@ class _ShellState extends State<Shell> {
         final p=await SharedPreferences.getInstance();
         await p.setString('palengke_role', r);
         await p.setString('palengke_vendor_user', u);
-        setState(()=>{role=r, vendorUser=u});
+        setState((){role=r; vendorUser=u;});
       }),
     ];
     return Scaffold(

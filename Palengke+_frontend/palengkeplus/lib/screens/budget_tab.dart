@@ -6,6 +6,7 @@ import '../core/theme.dart';
 import '../core/utils.dart';
 import '../widgets/leaf_mark.dart';
 import '../services/api_service.dart';
+import '../widgets/palengke_loading.dart';
 
 class BudgetCommodityPicker extends StatelessWidget {
   final List<dynamic> available;
@@ -141,7 +142,7 @@ class _BudgetTabState extends State<BudgetTab> {
       future: commoditiesFuture,
       builder: (context, snapshot) {
         if (restoring || snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: PalengkeLoading(scale: 0.6));
         }
         if (snapshot.hasError) {
           return errorState(snapshot.error.toString(), _reloadPrices);
@@ -436,6 +437,7 @@ class _BudgetTabState extends State<BudgetTab> {
     final rawUnit = _unitFor(item);
     final price = _effectivePrice(item);
 
+    final step = _stepFor(item);
     return Card(
       elevation: 0,
       margin: const EdgeInsets.only(bottom: 8),

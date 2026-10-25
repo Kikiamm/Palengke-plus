@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../core/theme.dart';
 import '../core/utils.dart';
+import '../widgets/palengke_loading.dart';
 import '../services/api_service.dart';
 
 class AnalyticsTab extends StatefulWidget {
@@ -70,7 +71,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
       future: dashboardFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: PalengkeLoading(scale: 0.6));
         }
         if (snapshot.hasError) {
           return errorState(snapshot.error.toString(), _refresh);

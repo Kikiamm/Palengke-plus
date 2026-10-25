@@ -1,0 +1,363 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Palengke Logo Animation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Nunito:wght@500;700&display=swap">
+<style>
+  /* Layout: one cream logo stage on a quiet page, replay control and a six-step storyboard underneath. */
+  :root {
+    --page: #edf1e4;
+    --ink: #17301f;
+    --ink-soft: #4b6454;
+    --line: #cfd8c3;
+    --stage: #fdf9ea;
+    --leaf-1: #2b9140;
+    --leaf-2: #0e4a20;
+    --sun: #f2b81d;
+    --chip: #f7faef;
+    --chip-on: #1d6b32;
+    --chip-on-ink: #fdf9ea;
+    --btn: #1d6b32;
+    --btn-ink: #fdf9ea;
+    --font-display: "Baloo 2", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+    --font-body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page: #0f1a13; --ink: #e9f1dd; --ink-soft: #9db3a2; --line: #2a3d30;
+      --chip: #172620; --chip-on: #3aa655; --chip-on-ink: #0b160f; --btn: #3aa655; --btn-ink: #0b160f;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page: #0f1a13; --ink: #e9f1dd; --ink-soft: #9db3a2; --line: #2a3d30;
+    --chip: #172620; --chip-on: #3aa655; --chip-on-ink: #0b160f; --btn: #3aa655; --btn-ink: #0b160f;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding-block: 28px 40px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+  .stage {
+    container-type: inline-size;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1000 / 470;
+    background: var(--stage);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 14px 40px -18px rgba(14,74,32,.35);
+  }
+  .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .stage svg * { transform-box: fill-box; }
+  .back { z-index: 1; }
+  .front { z-index: 3; }
+
+  .word {
+    position: absolute; z-index: 2;
+    left: 10%; top: 31%;
+    display: flex; align-items: baseline;
+    font-family: var(--font-display); font-weight: 800;
+    font-size: 16cqw; line-height: 1; letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+  .ch {
+    display: inline-block;
+    padding: 0 .015em;
+    background: linear-gradient(172deg, var(--leaf-1) 0%, #1b7a32 45%, var(--leaf-2) 100%);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 .02em 0 rgba(8,50,20,.35));
+    transform: rotate(var(--r, 0deg));
+    transform-origin: 50% 85%;
+  }
+  .ch.p { font-size: 1.22em; margin-right: -.03em; }
+  .ch.plus {
+    font-size: .66em; align-self: flex-start; margin-left: .02em; margin-top: .06em;
+    background: linear-gradient(172deg, #f7cf4a 0%, #f2b81d 55%, #e8920f 100%);
+    -webkit-background-clip: text; background-clip: text;
+    filter: drop-shadow(0 .04em 0 rgba(14,74,32,.55));
+  }
+
+  /* ---- Motion: only applies while .anim is set, so the resting page is the finished logo ---- */
+  .anim .pop   { animation: pop .75s cubic-bezier(.2,1.35,.4,1) var(--d, 0s) both; transform-origin: 50% 80%; }
+  .anim .drop  { animation: drop .9s cubic-bezier(.25,1.5,.4,1) var(--d, 0s) both; }
+  .anim .rise  { animation: rise .7s cubic-bezier(.2,1.4,.4,1) var(--d, 0s) both; }
+  .anim .grow  { animation: grow .8s cubic-bezier(.3,1.3,.5,1) var(--d, 0s) both; transform-origin: 0% 100%; }
+  .anim .sweep { animation: sweep 1s cubic-bezier(.45,.05,.2,1) var(--d, 0s) both; transform-origin: 0% 50%; }
+  .anim .swim  { animation: swim .9s cubic-bezier(.2,1.2,.4,1) var(--d, 0s) both; transform-origin: 50% 50%; }
+  .anim .spark { animation: spark .5s ease-out var(--d, 0s) both; transform-origin: 50% 50%; }
+  .anim .settle { animation: settle 1s ease-out 6.7s both; }
+
+  @keyframes pop {
+    0% { opacity: 0; transform: scale(.2) rotate(calc(var(--r, 0deg) - 12deg)); }
+    60% { opacity: 1; transform: scale(1.14) rotate(var(--r, 0deg)); }
+    100% { opacity: 1; transform: scale(1) rotate(var(--r, 0deg)); }
+  }
+  @keyframes drop {
+    0% { opacity: 0; transform: translateY(-170px); }
+    55% { opacity: 1; transform: translateY(12px); }
+    75% { transform: translateY(-5px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes rise {
+    0% { opacity: 0; transform: translateY(.35em) scale(.6) rotate(calc(var(--r, 0deg) + 10deg)); }
+    100% { opacity: 1; transform: translateY(0) scale(1) rotate(var(--r, 0deg)); }
+  }
+  @keyframes grow {
+    0% { opacity: 0; transform: scale(0); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes sweep {
+    0% { opacity: 0; transform: scaleX(0); }
+    15% { opacity: 1; }
+    100% { opacity: 1; transform: scaleX(1); }
+  }
+  @keyframes swim {
+    0% { opacity: 0; transform: translateX(-46px) rotate(-14deg) scale(.6); }
+    100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); }
+  }
+  @keyframes spark {
+    0% { opacity: 0; transform: scale(.2); }
+    60% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes settle {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.012); }
+    100% { transform: scale(1); }
+  }
+
+  /* ---- Controls ---- */
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; }
+  .bar p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.5; max-width: 52ch; min-width: 0; }
+  button.replay {
+    font: 700 16px/1 var(--font-body);
+    background: var(--btn); color: var(--btn-ink);
+    border: 0; border-radius: 999px; padding: 13px 22px;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+  }
+  button.replay:hover { filter: brightness(1.08); }
+  button.replay:focus-visible, .story:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+  button.replay svg { width: 16px; height: 16px; }
+
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+  .steps li {
+    background: var(--chip); border: 1px solid var(--line); border-radius: 12px;
+    padding: 10px 12px; font-size: 13.5px; line-height: 1.35; font-weight: 700;
+    color: var(--ink-soft);
+    display: flex; flex-direction: column; gap: 4px; min-width: 0;
+  }
+  .steps b { font-family: var(--font-display); font-size: 20px; line-height: 1; color: var(--ink); font-weight: 800; }
+  .anim .steps li { animation: chip .4s ease-out var(--d, 0s) both; }
+  .steps li { background: var(--chip-on); color: var(--chip-on-ink); border-color: transparent; }
+  .steps li b { color: var(--chip-on-ink); }
+  .anim .steps li { background: var(--chip); color: var(--ink-soft); border-color: var(--line); }
+  .anim .steps li b { color: var(--ink); }
+  .anim .steps li { animation: chip .4s ease-out var(--d, 0s) forwards; }
+  @keyframes chip {
+    to { background: var(--chip-on); color: var(--chip-on-ink); border-color: transparent; }
+  }
+  .anim .steps li b { animation: chipb .4s ease-out var(--d, 0s) forwards; }
+  @keyframes chipb { to { color: var(--chip-on-ink); } }
+
+  @media (max-width: 720px) { .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 420px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (prefers-reduced-motion: reduce) {
+    .anim * { animation: none !important; opacity: 1 !important; }
+  }
+</style>
+
+<main>
+  <div class="stage" id="stage" role="img" aria-label="Palengke+ logo: green lettering under a striped market awning, with a crate of vegetables and a fish above a green and yellow swoosh.">
+
+    <!-- awning posts sit behind the lettering -->
+    <svg class="back" viewBox="0 0 1000 470" aria-hidden="true">
+      <g class="drop" style="--d:1.2s">
+        <polygon points="196,124 212,124 224,238 208,238" fill="#8a5a2b"/>
+        <polygon points="196,124 203,124 215,238 208,238" fill="#a8723a"/>
+        <polygon points="372,118 388,118 400,240 384,240" fill="#8a5a2b"/>
+        <polygon points="372,118 379,118 391,240 384,240" fill="#a8723a"/>
+      </g>
+    </svg>
+
+    <div class="word" aria-hidden="true">
+      <span class="ch p pop" style="--d:.2s; --r:-3deg">P</span>
+      <span class="ch rise" style="--d:2.3s; --r:-2deg">A</span>
+      <span class="ch rise" style="--d:2.45s; --r:2deg">L</span>
+      <span class="ch rise" style="--d:2.6s; --r:-2deg">E</span>
+      <span class="ch rise" style="--d:2.75s; --r:2deg">N</span>
+      <span class="ch rise" style="--d:2.9s; --r:-2deg">G</span>
+      <span class="ch rise" style="--d:3.05s; --r:2deg">K</span>
+      <span class="ch rise" style="--d:3.2s; --r:-3deg">E</span>
+      <span class="ch plus pop" style="--d:3.4s; --r:0deg">+</span>
+    </div>
+
+    <svg class="front" viewBox="0 0 1000 470" aria-hidden="true">
+      <defs>
+        <linearGradient id="gGreen" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#1b7a32"/><stop offset="1" stop-color="#6cbf3e"/>
+        </linearGradient>
+        <linearGradient id="gYellow" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#f7cf4a"/><stop offset="1" stop-color="#f0a818"/>
+        </linearGradient>
+        <linearGradient id="gFish" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#4aa7dd"/><stop offset="1" stop-color="#7cc8ee"/>
+        </linearGradient>
+        <radialGradient id="gShadow" cx=".5" cy=".5" r=".5">
+          <stop offset="0" stop-color="#e9b45a" stop-opacity=".45"/><stop offset="1" stop-color="#e9b45a" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- soft ground shadow -->
+      <ellipse class="grow" style="--d:5.2s" cx="470" cy="418" rx="240" ry="18" fill="url(#gShadow)"/>
+
+      <!-- yellow and green swoosh (step 5) -->
+      <path class="sweep" style="--d:5.55s" fill="url(#gYellow)"
+        d="M540,402 C660,406 740,362 820,338 C880,320 935,330 952,362 C902,346 860,356 820,374 C740,406 650,430 540,402 Z"/>
+      <path class="sweep" style="--d:5.3s" fill="url(#gGreen)"
+        d="M246,334 C330,330 450,372 604,398 C470,414 330,404 246,334 Z"/>
+      <path class="sweep" style="--d:5.5s" fill="none" stroke="#a7dc78" stroke-width="3" stroke-linecap="round" opacity=".7"
+        d="M290,342 C380,350 470,376 560,392"/>
+
+      <!-- produce and fish (step 4) -->
+      <g>
+        <g class="pop" style="--d:3.9s">
+          <polygon points="395,330 520,332 512,374 405,372" fill="#c98a4b"/>
+          <polygon points="395,330 520,332 519,342 396,340" fill="#e0a566"/>
+          <line x1="399" y1="352" x2="516" y2="353" stroke="#9a6430" stroke-width="3"/>
+          <line x1="402" y1="364" x2="513" y2="364" stroke="#9a6430" stroke-width="3"/>
+        </g>
+        <g class="pop" style="--d:4.05s">
+          <circle cx="414" cy="318" r="22" fill="#4a9a3a"/>
+          <circle cx="436" cy="306" r="22" fill="#6dbb4a"/>
+          <circle cx="498" cy="304" r="20" fill="#5aab3f"/>
+          <circle cx="478" cy="296" r="17" fill="#7cc957"/>
+        </g>
+        <g class="pop" style="--d:4.2s">
+          <circle cx="440" cy="324" r="19" fill="#e0302b"/>
+          <ellipse cx="434" cy="316" rx="6" ry="4" fill="#fff" opacity=".35"/>
+          <path d="M432,306 l8,6 l8,-6 l-4,8 l-8,0 z" fill="#2f8a3a"/>
+        </g>
+        <g class="pop" style="--d:4.3s">
+          <circle cx="482" cy="326" r="17" fill="#e8403a"/>
+          <ellipse cx="477" cy="319" rx="5" ry="3.5" fill="#fff" opacity=".35"/>
+          <path d="M474,310 l8,6 l8,-6 l-4,8 l-8,0 z" fill="#2f8a3a"/>
+        </g>
+        <g class="pop" style="--d:4.45s">
+          <path d="M562,276 q8,-18 20,-14 q-2,14 -14,22 z" fill="#4faa3a"/>
+          <path d="M572,282 q16,-12 26,-2 q-10,10 -24,10 z" fill="#6cc24a"/>
+          <ellipse cx="556" cy="324" rx="15" ry="44" transform="rotate(22 556 324)" fill="#f08a1c"/>
+          <path d="M546,300 q8,-6 16,-2 M540,322 q8,-4 14,0 M538,342 q8,-4 12,0" stroke="#c96a0e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </g>
+        <g class="swim" style="--d:4.65s">
+          <polygon points="598,322 572,298 574,346" fill="#2f86c0"/>
+          <ellipse cx="650" cy="322" rx="58" ry="27" transform="rotate(-10 650 322)" fill="url(#gFish)"/>
+          <path d="M612,332 q36,18 84,-4 q-30,20 -84,4 z" fill="#d9f0fb" opacity=".8"/>
+          <path d="M640,296 q10,-16 28,-12 q-6,10 -6,18 z" fill="#2f86c0"/>
+          <circle cx="690" cy="310" r="6" fill="#fff"/>
+          <circle cx="692" cy="310" r="3" fill="#10202c"/>
+          <path d="M672,330 q8,2 14,-2" stroke="#2a7aae" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </g>
+      </g>
+
+      <!-- leaf tucked into the P (step 5) -->
+      <g transform="translate(212 276) rotate(-38) scale(.9)">
+        <path class="grow" style="--d:5.85s" fill="#6cbf45" d="M0,0 C18,-44 64,-62 104,-54 C98,-10 54,26 0,0 Z"/>
+        <path class="grow" style="--d:5.95s" fill="none" stroke="#2f8a3a" stroke-width="3" stroke-linecap="round" d="M6,-2 C36,-18 66,-34 96,-50"/>
+      </g>
+
+      <!-- leaves, top right (step 5) -->
+      <g transform="translate(748 152) rotate(-8)">
+        <path class="grow" style="--d:5.7s" fill="#2f9a46" d="M0,0 C20,-46 66,-64 106,-58 C100,-12 54,26 0,0 Z"/>
+        <path class="grow" style="--d:5.8s" fill="none" stroke="#bfe6a2" stroke-width="3" stroke-linecap="round" d="M8,-2 C40,-20 70,-38 98,-54"/>
+      </g>
+      <g transform="translate(812 160) rotate(-6) scale(.75)">
+        <path class="grow" style="--d:5.95s" fill="#14602a" d="M0,0 C20,-46 66,-64 106,-58 C100,-12 54,26 0,0 Z"/>
+        <path class="grow" style="--d:6.05s" fill="none" stroke="#7bc25a" stroke-width="3.5" stroke-linecap="round" d="M8,-2 C40,-20 70,-38 98,-54"/>
+      </g>
+
+      <!-- sparks around the P (step 1) and the awning (step 5) -->
+      <g stroke="#4fae3c" stroke-width="9" stroke-linecap="round" fill="none">
+        <path class="spark" style="--d:.55s" d="M66,214 L110,228"/>
+        <path class="spark" style="--d:.65s" d="M80,264 L118,246"/>
+        <path class="spark" style="--d:.75s" d="M236,196 L250,172"/>
+      </g>
+      <g stroke="#6cc24a" stroke-width="9" stroke-linecap="round" fill="none">
+        <path class="spark" style="--d:5.4s" d="M430,112 L462,70"/>
+        <path class="spark" style="--d:5.5s" d="M448,142 L494,124"/>
+      </g>
+
+      <!-- market awning (step 2) -->
+      <g class="drop" style="--d:1.2s">
+        <g id="awning"></g>
+      </g>
+    </svg>
+
+    <div class="settle" style="position:absolute; inset:0; pointer-events:none;"></div>
+  </div>
+
+  <div class="bar">
+    <p>Palengke logo, built up in six steps. The finished mark stays on screen when the animation ends.</p>
+    <button class="replay" id="replay" type="button">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.8-4.1"/><path d="M2.5 2.5v3.2h3.2"/></svg>
+      Replay
+    </button>
+  </div>
+
+  <ol class="steps" aria-label="Animation steps">
+    <li style="--d:.2s"><b>1</b>P appears</li>
+    <li style="--d:1.2s"><b>2</b>Market awning drops</li>
+    <li style="--d:2.3s"><b>3</b>Letters animate in</li>
+    <li style="--d:3.9s"><b>4</b>Produce and fish appear</li>
+    <li style="--d:5.3s"><b>5</b>Leaves and underline grow</li>
+    <li style="--d:6.7s"><b>6</b>Final logo</li>
+  </ol>
+</main>
+
+<script>
+  (function () {
+    // Build the striped awning: six stripes, each with a scalloped edge.
+    var top = [190, 221.7, 253.3, 285, 316.7, 348.3, 380];
+    var bot = [85, 137.5, 190, 242.5, 295, 347.5, 400];
+    var cols = ['#17672c', '#2c9143', '#f5f0d6', '#2c9143', '#f7e7a1', '#f2b81d'];
+    var yTop = 45, yBot = 128, ns = 'http://www.w3.org/2000/svg';
+    var g = document.getElementById('awning');
+    function el(name, attrs) {
+      var n = document.createElementNS(ns, name);
+      for (var k in attrs) n.setAttribute(k, attrs[k]);
+      g.appendChild(n);
+    }
+    for (var i = 0; i < 6; i++) {
+      el('polygon', { points: top[i] + ',' + yTop + ' ' + top[i + 1] + ',' + yTop + ' ' + bot[i + 1] + ',' + yBot + ' ' + bot[i] + ',' + yBot, fill: cols[i] });
+      var mid = (bot[i] + bot[i + 1]) / 2;
+      el('path', { d: 'M' + bot[i] + ',' + (yBot - 1) + ' Q' + mid + ',' + (yBot + 32) + ' ' + bot[i + 1] + ',' + (yBot - 1) + ' Z', fill: cols[i] });
+    }
+    el('path', { d: 'M190,45 L380,45', stroke: '#0f4d22', 'stroke-width': 5, 'stroke-linecap': 'round', fill: 'none' });
+    el('path', { d: 'M92,132 Q250,118 394,130', stroke: '#fff', 'stroke-width': 3, opacity: .25, fill: 'none', 'stroke-linecap': 'round' });
+
+    // Replay: removing and re-adding the class restarts every animation.
+    var stage = document.getElementById('stage');
+    var wrap = document.querySelector('main');
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function play() {
+      if (reduce) return;
+      wrap.classList.remove('anim');
+      void wrap.offsetWidth;
+      wrap.classList.add('anim');
+    }
+    document.getElementById('replay').addEventListener('click', play);
+    requestAnimationFrame(play);
+  })();
+</script>
+
+</body></html>

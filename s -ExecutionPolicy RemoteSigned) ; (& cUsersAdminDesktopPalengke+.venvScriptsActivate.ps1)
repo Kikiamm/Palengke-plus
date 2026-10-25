@@ -1,0 +1,20 @@
+[33m69d9a94[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/per-piece-vendor-split[m[33m, [m[1;31morigin/feature/per-piece-vendor-split[m[33m)[m feat: vendor price unit selector
+[33m7ffaa00[m feat: per-piece estimates + consumer/vendor split + DA vs vendor forecast isolation (branch fallback preserved)
+[33m0549dab[m chore: snapshot modular frontend + piece_weights baseline for per-piece/vendor branch (fallback preserved on main ddd6447)
+[33mddd6447[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m fix: split liveness HEAD no-DB + analytics JSONResponse bug (502+500)
+[33md309e7c[m fix: health aliases / /health /api fix Render 502 (healthcheck 404 -> unhealthy)
+[33mb286167[m fix: bust forecast cache on sync + 80-report backfill (thin DB baseline bug)
+[33m2ec4160[m fix: postgres persistent DB (Neon pooled) + health shows postgres/sqlite, no-store cache
+[33m8965299[m fix: holdout test naive last-value (0.1 CPU), 6/6 green
+[33m4230c19[m fix: flutter analyze 0 errors (isEmpty), rebuild clean for wrap
+[33ma869a07[m fix: hard-timeout ARIMA.fit with ThreadPool(4s) guarantees no 15s timeout; eager DA sync if latest<yesterday fixes stale date
+[33m6138ee6[m fix: forecast 60-day cap + 4s budget fallback to baseline, guarantees <5s on 0.1 CPU
+[33m3907803[m fix: holdout+baselines no ARIMA fit, 0.11s forecast (was 5s), 90-day cap
+[33mf98ee15[m fix: ForecastScreen shows 30D history while 7D forecast warms, analytics 90s, forecaster skip in-sample (0.2s), forecast off-thread
+[33m628a41d[m fix: ARIMA fixed (1,1,1) single fit for free tier (forecast <5s)
+[33mce5ad5e[m fix: prewarm forecast cache off-request, defer DA sync 6h after prewarm (no CPU starvation on wake)
+[33mb816e14[m fix: Analytics not blocked by forecast, 6h forecast cache, delay sync 90s (fixes Connection Error)
+[33ma95aed0[m fix: ARIMA 6-fit grid + 60s forecast timeout (free tier slow)
+[33mb4587ff[m fix: auto-migrate stale URL to cloud, 30s timeout, bust Sept cache (v4)
+[33mbbfaa35[m fix: auto-migrate stale local URL to cloud + bust Sept cache (v3)
+[33m9dafcff[m feat: add /api/admin/sync for real DA backfill (ponytail ephemeral)

@@ -4,6 +4,7 @@ import '../core/utils.dart';
 import '../widgets/leaf_mark.dart';
 import '../services/api_service.dart';
 import 'forecast_screen.dart';
+import '../widgets/palengke_loading.dart';
 
 class HomeTab extends StatefulWidget {
   final ApiService api;
@@ -67,7 +68,7 @@ class _HomeTabState extends State<HomeTab> {
             future: future,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: PalengkeLoading(scale: 0.6));
               }
               if (snapshot.hasError) {
                 return errorState(snapshot.error.toString(), reload);

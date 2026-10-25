@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/theme.dart';
 import '../core/utils.dart';
 import '../services/api_service.dart';
+import '../widgets/palengke_loading.dart';
 
 class ForecastScreen extends StatefulWidget {
   final String commodity;
@@ -111,25 +112,43 @@ class _ForecastScreenState extends State<ForecastScreen> {
       backgroundColor: navy,
       foregroundColor: Colors.white,
     ),
-    body: Column(children:[Padding(padding: const EdgeInsets.fromLTRB(12,8,12,0), child: SegmentedButton<String>(segments: const [ButtonSegment(value:'da', label: Text('DA forecast')), ButtonSegment(value:'vendor', label: Text('Vendor'))], selected:{source}, onSelectionChanged:(s)=> setState(()=>{source=s.first, future=_load()}))), Expanded(child: FutureBuilder<Map<String, dynamic>>(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          return errorState(
-            snapshot.error.toString(),
-            () => setState(() => future = _load()),
-          );
-        }
-        final data = snapshot.data!;
-        final history = (data['history'] as List<dynamic>?) ?? [];
-        final forecastMap = (data['forecast'] as Map<String, dynamic>?) ?? {};
-        final forecastErr = data['forecastError'] as String?;
-        final forecasts = (forecastMap['forecast'] as List<dynamic>?) ?? [];
-        final quality = (forecastMap['quality'] as Map<dynamic, dynamic>?) ?? {};
-        final qualityStatus = quality['status']?.toString() ?? 'unknown';
+        body: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+          child: SegmentedButton<String>(
+            segments: const [
+              ButtonSegment(value: 'da', label: Text('DA forecast')),
+              ButtonSegment(value: 'vendor', label: Text('Vendor')),
+            ],
+            selected: {source},
+            onSelectionChanged: (s) => setState(() {
+              source = s.first;
+              future = _load();
+            }),
+          ),
+        ),
+        Expanded(
+          child: FutureBuilder<Map<String, dynamic>>(
+            future: future,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: PalengkeLoading(scale: 0.6));
+              }
+              if (snapshot.hasError) {
+                return errorState(
+                  snapshot.error.toString(),
+                  () => setState(() => future = _load()),
+                );
+              }
+              final data = snapshot.data!;
+              final history = (data['history'] as List<dynamic>?) ?? [];
+              final forecastMap = (data['forecast'] as Map<String, dynamic>?) ?? {};
+              final forecastErr = data['forecastError'] as String?;
+              final forecasts = (forecastMap['forecast'] as List<dynamic>?) ?? [];
+              final quality = (forecastMap['quality'] as Map<dynamic, dynamic>?) ?? {};
+              final qualityStatus = quality['status']?.toString() ?? 'unknown';
+
         final limitedHistory = qualityStatus != 'validated';
         final observations = quality['observations']?.toString() ?? 'n/a';
         final validationPoints =
@@ -386,8 +405,13 @@ class _ForecastScreenState extends State<ForecastScreen> {
         );
       },
     ),
-  );
+  ),
+],
+),
+);
+
   Widget _metric(String label, String value) => Column(
+
     mainAxisSize: MainAxisSize.min,
     children: [
       FittedBox(
@@ -397,11 +421,16 @@ class _ForecastScreenState extends State<ForecastScreen> {
           style: const TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.bold,
-            color: navy,
           ),
         ),
       ),
-      Text(label, style: const TextStyle(fontSize: 11, color: Colors.blueGrey)),
+      Text(
+        label,
+        style: const TextStyle(fontSize: 11, color: Colors.blueGrey),
+      ),
     ],
   );
 }
+
+
+
