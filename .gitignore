@@ -48,6 +48,9 @@ Palengke+_Defect_Prevention_Activity.pdf
 Palengke+_SQA_Review.pdf
 ActivityMidterm*.docx
 
+# Ensure start.sh is not ignored
+!start.sh
+
 # Videos / large binaries - don't deploy
 *.mp4
 *.mov
