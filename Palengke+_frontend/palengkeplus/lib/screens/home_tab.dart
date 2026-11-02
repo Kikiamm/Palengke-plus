@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/theme.dart';
 import '../core/utils.dart';
-import '../widgets/leaf_mark.dart';
 import '../services/api_service.dart';
 import 'forecast_screen.dart';
 import '../widgets/palengke_loading.dart';
@@ -121,12 +120,6 @@ class _HomeTabState extends State<HomeTab> {
               onPressed: widget.onSettings,
               icon: const Icon(Icons.tune, color: Colors.white),
               tooltip: 'Server settings',
-            ),
-            const SizedBox(width: 2),
-            LeafMark(
-              size: 30,
-              color: Colors.white.withValues(alpha: 0.16),
-              rotation: 0.45,
             ),
           ],
         ),
