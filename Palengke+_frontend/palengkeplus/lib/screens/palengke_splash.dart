@@ -41,13 +41,23 @@ double _kf(double p, List<double> stops, List<double> vals, Curve curve) {
 class PalengkeSplash extends StatefulWidget {
   const PalengkeSplash({
     super.key,
-    required this.onFinished,
+    this.onFinished,
     this.hold = const Duration(milliseconds: 500),
+    this.isHeader = false,
   });
 
   /// Called once, after the animation ends (+ [hold]) or when the user taps to skip.
-  final VoidCallback onFinished;
+  final VoidCallback? onFinished;
   final Duration hold;
+  final bool isHeader;
+
+  /// Global session flag so the header animation only plays once per session.
+  static bool hasPlayedOnce = false;
+
+  /// Reset session flag (useful for testing or manual replay).
+  static void resetSession() {
+    hasPlayedOnce = false;
+  }
 
   @override
   State<PalengkeSplash> createState() => _PalengkeSplashState();
@@ -64,18 +74,37 @@ class _PalengkeSplashState extends State<PalengkeSplash>
   void _finish() {
     if (_done || !mounted) return;
     _done = true;
-    widget.onFinished();
+    if (widget.isHeader) {
+      PalengkeSplash.hasPlayedOnce = true;
+    }
+    widget.onFinished?.call();
+  }
+
+  void _skipToEnd() {
+    if (_done) return;
+    _c.value = 1.0;
+    _finish();
   }
 
   @override
   void initState() {
     super.initState();
-    _c.forward();
-    _c.addStatusListener((s) {
-      if (s == AnimationStatus.completed) {
-        Future.delayed(widget.hold, _finish);
-      }
-    });
+    if (widget.isHeader && PalengkeSplash.hasPlayedOnce) {
+      _c.value = 1.0;
+      _done = true;
+    } else {
+      _c.forward();
+      _c.addStatusListener((s) {
+        if (s == AnimationStatus.completed) {
+          if (widget.isHeader) {
+            PalengkeSplash.hasPlayedOnce = true;
+            _done = true;
+          } else {
+            Future.delayed(widget.hold, _finish);
+          }
+        }
+      });
+    }
   }
 
   @override
@@ -86,6 +115,48 @@ class _PalengkeSplashState extends State<PalengkeSplash>
 
   @override
   Widget build(BuildContext context) {
+    final stageContent = FittedBox(
+      fit: BoxFit.contain,
+      child: SizedBox(
+        width: 1000,
+        height: 470,
+        child: AnimatedBuilder(
+          animation: _c,
+          builder: (_, _) => _Stage(_c.value * _total),
+        ),
+      ),
+    );
+
+    if (widget.isHeader) {
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: _skipToEnd,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: _bg,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: const Color(0xFFE5DAC0),
+              width: 1.2,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.16),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: AspectRatio(
+            aspectRatio: 1000 / 470,
+            child: stageContent,
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: _bg,
       body: GestureDetector(
@@ -95,17 +166,7 @@ class _PalengkeSplashState extends State<PalengkeSplash>
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: SizedBox(
-                  width: 1000,
-                  height: 470,
-                  child: AnimatedBuilder(
-                    animation: _c,
-                    builder: (_, _) => _Stage(_c.value * _total),
-                  ),
-                ),
-              ),
+              child: stageContent,
             ),
           ),
         ),

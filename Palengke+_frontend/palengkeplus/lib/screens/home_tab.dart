@@ -4,6 +4,7 @@ import '../core/utils.dart';
 import '../services/api_service.dart';
 import 'forecast_screen.dart';
 import '../widgets/palengke_loading.dart';
+import 'palengke_splash.dart';
 
 class HomeTab extends StatefulWidget {
   final ApiService api;
@@ -91,26 +92,29 @@ class _HomeTabState extends State<HomeTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.15),
+                ),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
+                  Icon(Icons.eco_rounded, size: 14, color: accent),
+                  SizedBox(width: 6),
                   Text(
-                    'DA-4A CALABARZON',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    'PALENGKE+',
+                    'DA-4A CALABARZON • CALAMBA CITY',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 23,
-                      fontWeight: FontWeight.w800,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.8,
                     ),
                   ),
                 ],
@@ -118,11 +122,14 @@ class _HomeTabState extends State<HomeTab> {
             ),
             IconButton(
               onPressed: widget.onSettings,
-              icon: const Icon(Icons.tune, color: Colors.white),
+              icon: const Icon(Icons.tune, color: Colors.white, size: 20),
               tooltip: 'Server settings',
+              visualDensity: VisualDensity.compact,
             ),
           ],
         ),
+        const SizedBox(height: 12),
+        const PalengkeSplash(isHeader: true),
         const SizedBox(height: 14),
         TextField(
           onChanged: (value) => setState(() => query = value.toLowerCase()),
