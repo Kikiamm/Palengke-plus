@@ -89,12 +89,46 @@ def observation_date(text):
 
 
 def extract_price(text, label):
+    # Check if we should use a simpler matching for missing commodities
+    simple_labels = {
+        "Well Milled 1-19% bran streak": "rice",
+        "Regular Milled 20-40% bran streak": "rice",
+        "Premium 5% broken": "rice",
+        "Corn (Yellow) Cob": "corn",
+        "Chicken Egg (White, Medium)": "egg",
+        "Tilapia Medium": "tilapia"
+    }
+    
+    search_label = label.lower().strip()
+    
     for line in text.splitlines():
-        if not line.strip().lower().startswith(label.lower()):
-            continue
-        values = re.findall(r"\d+(?:\.\d+)?", line)
-        if len(values) >= 2:
-            return float(values[-2]), "per piece" if "egg" in label.lower() else "per kg"
+        line_clean = line.strip().lower()
+        
+        # Original logic with expanded patterns
+        if any(line_clean.startswith(pattern) for pattern in [
+            search_label,
+            search_label + " ",
+            "(" + search_label + ")",
+            search_label + ":",
+            search_label + " (",
+            search_label + ") ",
+            search_label + ": ",
+            "(" + search_label + ") ",
+            "(" + search_label + "):",
+            "(" + search_label + ") :",
+            "local " + search_label,
+            "commercial " + search_label,
+            "special " + search_label,
+            "regular " + search_label,
+            "well " + search_label,
+            "corn " + search_label,
+            "egg " + search_label,
+            "chicken " + search_label,
+            "tilapia " + search_label
+        ]) or (label in simple_labels and simple_labels[label] in line_clean):
+            values = re.findall(r"\d+(?:\.\d+)?", line)
+            if len(values) >= 2:
+                return float(values[-2]), "per piece" if "egg" in search_label else "per kg"
     return None
 
 

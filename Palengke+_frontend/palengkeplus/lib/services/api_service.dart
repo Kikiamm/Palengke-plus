@@ -14,8 +14,8 @@ class ApiService {
 
   static String activeBaseUrl = cloudUrl;
   static const String _baseUrlKey = 'api_base_url';
-  static const String _cacheVersion = 'v4'; // bust Sept cache, 30s cold-start
-  static const String _migratedKey = 'v4_migrated_cloud';
+  static const String _cacheVersion = 'v5'; // bumped to v5 to clear stale 17-item cache
+  static const String _migratedKey = 'v5_migrated_cloud'; // bumped to v5 to clear stale 17-item cache
 
   static Future<void> initialize() async {
     final preferences = await SharedPreferences.getInstance();
@@ -25,7 +25,7 @@ class ApiService {
         await preferences.setString(_baseUrlKey, cloudUrl);
       }
       // drop old Sept caches
-      for (final k in ['v2_commodities_cache','v2_analytics_cache','v3_commodities_cache','v3_analytics_cache']) {
+      for (final k in ['v2_commodities_cache','v2_analytics_cache','v3_commodities_cache','v3_analytics_cache','v4_commodities_cache','v4_analytics_cache']) {
         await preferences.remove(k); await preferences.remove('${k}_saved_at');
       }
       await preferences.setBool(_migratedKey, true);

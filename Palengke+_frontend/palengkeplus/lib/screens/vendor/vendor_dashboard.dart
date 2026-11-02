@@ -62,7 +62,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
             return const Center(child: PalengkeLoading());
           }
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Error: ${snapshot.error}', style: const TextStyle(color: Colors.red)));
           }
 
           final myPrices = snapshot.data ?? [];
@@ -77,7 +77,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
                     children: [
                       Text(
                         'Welcome, ${widget.vendorUser}',
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: navy),
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       const Text(
                         'Manage your stall inventory and prices here.',
@@ -88,7 +88,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
                       const SizedBox(height: 24),
                       const Text(
                         'MY LISTED PRICES',
-                        style: TextStyle(color: green, fontSize: 11, fontWeight: FontWeight.w800),
+                        style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                     ],
@@ -338,7 +338,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
                         final p = double.tryParse(priceController.text);
                         final m = marketController.text.trim();
                         if (p == null || selectedComm == null || m.isEmpty) {
-                          ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text('Please fill all required fields')));
+                          ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text('Please fill all required fields', style: TextStyle(color: Colors.red))));
                           return;
                         }
                         try {
@@ -353,7 +353,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
                           if (ctx.mounted) Navigator.pop(ctx);
                           _refresh();
                         } catch (e) {
-                          if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(content: Text('Error: $e')));
+                          if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(content: Text('Error: $e', style: TextStyle(color: Colors.red))));
                         }
                       },
                       child: const Text('Submit Price', style: TextStyle(fontWeight: FontWeight.bold)),

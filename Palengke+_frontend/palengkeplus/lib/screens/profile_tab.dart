@@ -197,7 +197,7 @@ class _ProfileTabState extends State<ProfileTab> {
                           icon: const Icon(Icons.logout, size: 16, color: red),
                           label: const Text(
                             'Logout vendor',
-                            style: TextStyle(color: red),
+                            style: TextStyle(color: Colors.red),
                           ),
                         ),
                     ],
