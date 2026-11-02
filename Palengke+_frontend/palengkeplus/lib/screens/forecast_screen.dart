@@ -325,9 +325,84 @@ class _ForecastScreenState extends State<ForecastScreen> {
                     ? const Center(child: Text('Forecast warming - pull to refresh'))
                     : LineChart(
                         LineChartData(
-                          lineBarsData: [LineChartBarData(spots: points, isCurved: true, color: green, barWidth: 3, dotData: const FlDotData(show: true))],
-                          gridData: FlGridData(show: true, drawVerticalLine: false, getDrawingHorizontalLine: (_) => FlLine(color: Colors.grey.shade200)),
-                          titlesData: const FlTitlesData(show: false),
+                          lineTouchData: LineTouchData(
+                            enabled: true,
+                            handleBuiltInTouches: true,
+                            touchTooltipData: LineTouchTooltipData(
+                              getTooltipColor: (_) => navy,
+                              tooltipRoundedRadius: 8,
+                              tooltipPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                              getTooltipItems: (touchedSpots) {
+                                return touchedSpots.map((spot) {
+                                  final index = spot.x.toInt();
+                                  String dateLabel = '';
+                                  if (index >= 0 && index < forecasts.length) {
+                                    dateLabel = forecasts[index]['date']?.toString() ?? '';
+                                  }
+                                  final priceText = '₱${formatPrice(spot.y)}';
+                                  final headerText = dateLabel.isNotEmpty ? '$dateLabel\n' : '';
+                                  return LineTooltipItem(
+                                    '$headerText$priceText',
+                                    const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                                  );
+                                }).toList();
+                              },
+                            ),
+                          ),
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: points,
+                              isCurved: true,
+                              color: green,
+                              barWidth: 3,
+                              dotData: const FlDotData(show: true),
+                            ),
+                          ],
+                          gridData: FlGridData(
+                            show: true,
+                            drawVerticalLine: false,
+                            getDrawingHorizontalLine: (_) => FlLine(color: Colors.grey.shade200),
+                          ),
+                          titlesData: FlTitlesData(
+                            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 44,
+                                getTitlesWidget: (value, meta) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 6),
+                                    child: Text(
+                                      '₱${value.toStringAsFixed(0)}',
+                                      style: const TextStyle(color: Colors.blueGrey, fontSize: 10, fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.end,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 22,
+                                interval: 1,
+                                getTitlesWidget: (value, meta) {
+                                  final index = value.toInt();
+                                  String label = '';
+                                  if (index >= 0 && index < forecasts.length) {
+                                    final d = forecasts[index]['date']?.toString() ?? '';
+                                    label = d.length >= 10 ? d.substring(5) : d;
+                                  }
+                                  if (label.isEmpty) return const SizedBox.shrink();
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 4),
+                                    child: Text(label, style: const TextStyle(color: Colors.blueGrey, fontSize: 10, fontWeight: FontWeight.w500)),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                           borderData: FlBorderData(show: false),
                         ),
                       ),

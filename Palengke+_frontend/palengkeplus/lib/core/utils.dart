@@ -123,7 +123,10 @@ String formatPrice(dynamic value) => parseNumber(value).toStringAsFixed(2);
 String displayDate(String value) {
   final date = DateTime.tryParse(value);
   if (date == null) return value;
-  return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  final now = DateTime.now();
+  return date.year == now.year && date.month == now.month && date.day == now.day
+      ? 'as of today'
+      : '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 }
 
 BoxDecoration cardDecoration() => BoxDecoration(

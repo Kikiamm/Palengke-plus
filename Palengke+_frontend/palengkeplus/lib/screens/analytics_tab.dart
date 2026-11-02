@@ -325,8 +325,8 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
               ),
             if (forecastErr != null && showForecast) const SizedBox(height: 10),
             Container(
-              height: 220,
-              padding: const EdgeInsets.fromLTRB(10, 14, 14, 10),
+              height: 260,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -338,13 +338,60 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                     )
                   : LineChart(
                       LineChartData(
+                        lineTouchData: LineTouchData(
+                          enabled: true,
+                          handleBuiltInTouches: true,
+                          touchTooltipData: LineTouchTooltipData(
+                            getTooltipColor: (_) => navy,
+                            tooltipRoundedRadius: 8,
+                            tooltipPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                            getTooltipItems: (touchedSpots) {
+                              return touchedSpots.map((spot) {
+                                final index = spot.x.toInt();
+                                String dateLabel = '';
+                                if (showForecast) {
+                                  if (index == 0) {
+                                    dateLabel = 'Today';
+                                  } else if (index - 1 < forecasts.length) {
+                                    dateLabel = forecasts[index - 1]['date']?.toString() ?? '';
+                                  }
+                                } else {
+                                  if (index >= 0 && index < history.length) {
+                                    dateLabel = history[index]['date']?.toString() ?? '';
+                                  }
+                                }
+                                final priceText = '₱${formatPrice(spot.y)}';
+                                final headerText = dateLabel.isNotEmpty ? '$dateLabel\n' : '';
+
+                                return LineTooltipItem(
+                                  '$headerText$priceText',
+                                  const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              }).toList();
+                            },
+                          ),
+                        ),
                         lineBarsData: [
                           LineChartBarData(
                             spots: chartSpots,
                             isCurved: true,
                             color: green,
                             barWidth: 2.5,
-                            dotData: const FlDotData(show: false),
+                            dotData: FlDotData(
+                              show: true,
+                              getDotPainter: (spot, percent, barData, index) {
+                                return FlDotCirclePainter(
+                                  radius: 3,
+                                  color: green,
+                                  strokeWidth: 1.5,
+                                  strokeColor: Colors.white,
+                                );
+                              },
+                            ),
                             belowBarData: BarAreaData(
                               show: true,
                               color: green.withValues(alpha: 0.08),
@@ -357,7 +404,68 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                           getDrawingHorizontalLine: (_) =>
                               FlLine(color: line, strokeWidth: 0.8),
                         ),
-                        titlesData: const FlTitlesData(show: false),
+                        titlesData: FlTitlesData(
+                          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 44,
+                              getTitlesWidget: (value, meta) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 6),
+                                  child: Text(
+                                    '₱${value.toStringAsFixed(0)}',
+                                    style: const TextStyle(
+                                      color: Colors.blueGrey,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    textAlign: TextAlign.end,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 22,
+                              interval: showForecast
+                                  ? 1
+                                  : (history.length > 7 ? (history.length / 4).ceilToDouble() : 1),
+                              getTitlesWidget: (value, meta) {
+                                final index = value.toInt();
+                                String label = '';
+                                if (showForecast) {
+                                  if (index == 0) {
+                                    label = 'Now';
+                                  } else if (index - 1 < forecasts.length) {
+                                    final d = forecasts[index - 1]['date']?.toString() ?? '';
+                                    label = d.length >= 10 ? d.substring(5) : d;
+                                  }
+                                } else {
+                                  if (index >= 0 && index < history.length) {
+                                    final d = history[index]['date']?.toString() ?? '';
+                                    label = d.length >= 10 ? d.substring(5) : d;
+                                  }
+                                }
+                                if (label.isEmpty) return const SizedBox.shrink();
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 4),
+                                  child: Text(
+                                    label,
+                                    style: const TextStyle(
+                                      color: Colors.blueGrey,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
                         borderData: FlBorderData(show: false),
                       ),
                     ),

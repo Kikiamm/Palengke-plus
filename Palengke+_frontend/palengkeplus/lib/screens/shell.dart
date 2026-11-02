@@ -1,3 +1,4 @@
+import '../core/app_settings.dart';
 import 'palengke_splash.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,109 +16,176 @@ class PalengkePlusApp extends StatelessWidget {
   const PalengkePlusApp({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-    title: 'Palengke+ DA Reference',
-    debugShowCheckedModeBanner: false,
-    theme: ThemeData(
-      useMaterial3: true,
-      scaffoldBackgroundColor: Colors.transparent,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: green,
-        primary: navy,
-        secondary: accent,
-        surface: Colors.white,
-      ),
-      textTheme: GoogleFonts.nunitoTextTheme(),
-      dividerColor: line,
-      navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: Colors.white,
-        indicatorColor: const Color(0xFFE8F1E7),
-        height: 66,
-        labelTextStyle: WidgetStateProperty.resolveWith(
-          (states) => TextStyle(
-            color: states.contains(WidgetState.selected)
-                ? navy
-                : Colors.black54,
-            fontSize: 11,
-            fontWeight: states.contains(WidgetState.selected)
-                ? FontWeight.w700
-                : FontWeight.w500,
-          ),
-        ),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 12,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: line),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: line),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: green, width: 1.5),
-        ),
-      ),
-    ),
-    builder: (context, child) => ColoredBox(
-      color: canvas,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-          fontFamilyFallback: [
-            'Noto Color Emoji',
-            'Segoe UI Emoji',
-            'Apple Color Emoji',
-          ],
-        ),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 448),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: -24,
-                  top: 180,
-                  child: LeafMark(
-                    size: 76,
-                    color: green.withValues(alpha: 0.035),
-                    rotation: -0.55,
-                  ),
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: AppSettings.instance,
+      builder: (context, _) {
+        final isDark = AppSettings.instance.isDarkMode;
+        return MaterialApp(
+          title: 'Palengke+ DA Reference',
+          debugShowCheckedModeBanner: false,
+          themeMode: AppSettings.instance.themeMode,
+          theme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.light,
+            scaffoldBackgroundColor: Colors.transparent,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: green,
+              primary: navy,
+              secondary: accent,
+              surface: Colors.white,
+              brightness: Brightness.light,
+            ),
+            textTheme: GoogleFonts.nunitoTextTheme(),
+            dividerColor: line,
+            navigationBarTheme: NavigationBarThemeData(
+              backgroundColor: Colors.white,
+              indicatorColor: const Color(0xFFE8F1E7),
+              height: 66,
+              labelTextStyle: WidgetStateProperty.resolveWith(
+                (states) => TextStyle(
+                  color: states.contains(WidgetState.selected)
+                      ? navy
+                      : Colors.black54,
+                  fontSize: 11,
+                  fontWeight: states.contains(WidgetState.selected)
+                      ? FontWeight.w700
+                      : FontWeight.w500,
                 ),
-                Positioned(
-                  right: -24,
-                  bottom: 125,
-                  child: LeafMark(
-                    size: 82,
-                    color: green.withValues(alpha: 0.03),
-                    rotation: 0.6,
-                  ),
-                ),
-                child!,
-              ],
+              ),
+            ),
+            inputDecorationTheme: InputDecorationTheme(
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: line),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: line),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: green, width: 1.5),
+              ),
             ),
           ),
-        ),
-      ),
-    ),
-    home: Builder(
-      builder: (context) => PalengkeSplash(
-        onFinished: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const Shell()),
-          );
-        },
-      ),
-    ),
-  );
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: canvasDark,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: green,
+              brightness: Brightness.dark,
+              primary: green,
+              secondary: accent,
+              surface: const Color(0xFF1E2822),
+            ),
+            textTheme: GoogleFonts.nunitoTextTheme(ThemeData.dark().textTheme),
+            dividerColor: lineDark,
+            navigationBarTheme: NavigationBarThemeData(
+              backgroundColor: const Color(0xFF161E19),
+              indicatorColor: green.withValues(alpha: 0.3),
+              height: 66,
+              labelTextStyle: WidgetStateProperty.resolveWith(
+                (states) => TextStyle(
+                  color: states.contains(WidgetState.selected)
+                      ? Colors.white
+                      : Colors.white60,
+                  fontSize: 11,
+                  fontWeight: states.contains(WidgetState.selected)
+                      ? FontWeight.w700
+                      : FontWeight.w500,
+                ),
+              ),
+            ),
+            inputDecorationTheme: InputDecorationTheme(
+              filled: true,
+              fillColor: const Color(0xFF1E2822),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: lineDark),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: lineDark),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: green, width: 1.5),
+              ),
+            ),
+          ),
+          builder: (context, child) => ColoredBox(
+            color: isDark ? canvasDark : canvas,
+            child: DefaultTextStyle(
+              style: const TextStyle(
+                fontFamilyFallback: [
+                  'Noto Color Emoji',
+                  'Segoe UI Emoji',
+                  'Apple Color Emoji',
+                ],
+              ),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 448),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: -24,
+                        top: 180,
+                        child: LeafMark(
+                          size: 76,
+                          color: green.withValues(alpha: isDark ? 0.08 : 0.035),
+                          rotation: -0.55,
+                        ),
+                      ),
+                      Positioned(
+                        right: -24,
+                        bottom: 125,
+                        child: LeafMark(
+                          size: 82,
+                          color: green.withValues(alpha: isDark ? 0.07 : 0.03),
+                          rotation: 0.6,
+                        ),
+                      ),
+                      MediaQuery(
+                        data: MediaQuery.of(context).copyWith(
+                          textScaler: TextScaler.linear(
+                            AppSettings.instance.fontSizeFactor,
+                          ),
+                        ),
+                        child: child!,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          home: Builder(
+            builder: (context) => PalengkeSplash(
+              onFinished: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const Shell()),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
-
 
 class Shell extends StatefulWidget {
   const Shell({super.key});

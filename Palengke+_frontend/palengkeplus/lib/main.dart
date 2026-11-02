@@ -1,3 +1,4 @@
+import 'core/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'screens/shell.dart';
 import 'services/api_service.dart';
@@ -18,5 +19,6 @@ export 'services/api_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ApiService.initialize();
+  await AppSettings.instance.load();
   runApp(const PalengkePlusApp());
 }

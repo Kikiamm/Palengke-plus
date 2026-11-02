@@ -1,3 +1,4 @@
+import '../core/app_settings.dart';
 import 'vendor/vendor_dashboard.dart';
 import 'package:flutter/material.dart';
 import '../core/theme.dart';
@@ -132,6 +133,48 @@ class _ProfileTabState extends State<ProfileTab> {
                 rotation: 0.35,
               ),
             ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: const BorderSide(color: line),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Appearance',
+                  style: TextStyle(fontWeight: FontWeight.w800, color: navy),
+                ),
+                const SizedBox(height: 8),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Dark Mode'),
+                  value: AppSettings.instance.isDarkMode,
+                  onChanged: (v) async {
+                    await AppSettings.instance.setDarkMode(v);
+                    if (mounted) setState(() {});
+                  },
+                ),
+                const Text('Text Scale', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                Slider(
+                  value: AppSettings.instance.fontSizeFactor,
+                  min: 0.8,
+                  max: 1.5,
+                  divisions: 7,
+                  label: '${(AppSettings.instance.fontSizeFactor * 100).toInt()}%',
+                  onChanged: (v) async {
+                    await AppSettings.instance.setFontSizeFactor(v);
+                    if (mounted) setState(() {});
+                  },
+                ),
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 12),
