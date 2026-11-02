@@ -249,7 +249,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.show_chart, color: navy),
+                      Icon(Icons.show_chart, color: greenBright),
                       const SizedBox(width: 10),
                       const Expanded(
                         child: Text(
@@ -307,7 +307,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
                       child: LineChart(
                         LineChartData(
                           lineBarsData: [LineChartBarData(spots: history.map((e) => FlSpot(history.indexOf(e).toDouble(), parseNumber(e['price']))).toList().isEmpty ? [FlSpot(0,0)] : history.map((e) => FlSpot(history.indexOf(e).toDouble(), parseNumber(e['price']))).toList(), isCurved: true, color: green, barWidth: 2.5, dotData: const FlDotData(show: false), belowBarData: BarAreaData(show: true, color: green.withValues(alpha: 0.08)))],
-                          gridData: FlGridData(show: true, drawVerticalLine: false, getDrawingHorizontalLine: (_) => FlLine(color: Colors.grey.shade200)),
+                          gridData: FlGridData(show: true, drawVerticalLine: false, getDrawingHorizontalLine: (_) => FlLine(color: adaptiveLine)),
                           titlesData: const FlTitlesData(show: false),
                           borderData: FlBorderData(show: false),
                         ),
@@ -361,7 +361,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
                           gridData: FlGridData(
                             show: true,
                             drawVerticalLine: false,
-                            getDrawingHorizontalLine: (_) => FlLine(color: Colors.grey.shade200),
+                            getDrawingHorizontalLine: (_) => FlLine(color: adaptiveLine),
                           ),
                           titlesData: FlTitlesData(
                             rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -375,7 +375,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
                                     padding: const EdgeInsets.only(right: 6),
                                     child: Text(
                                       '₱${value.toStringAsFixed(0)}',
-                                      style: const TextStyle(color: Colors.blueGrey, fontSize: 10, fontWeight: FontWeight.w500),
+                                      style: TextStyle(color: adaptiveSubtext, fontSize: 10, fontWeight: FontWeight.w500),
                                       textAlign: TextAlign.end,
                                     ),
                                   );
@@ -397,7 +397,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
                                   if (label.isEmpty) return const SizedBox.shrink();
                                   return Padding(
                                     padding: const EdgeInsets.only(top: 4),
-                                    child: Text(label, style: const TextStyle(color: Colors.blueGrey, fontSize: 10, fontWeight: FontWeight.w500)),
+                                    child: Text(label, style: TextStyle(color: adaptiveSubtext, fontSize: 10, fontWeight: FontWeight.w500)),
                                   );
                                 },
                               ),
@@ -420,7 +420,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     child: Row(children: [
                       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(item['date'].toString(), style: const TextStyle(fontWeight: FontWeight.w600)), const SizedBox(height: 3), Text('History: ₱${formatPrice(item['price'])}', style: const TextStyle(fontSize: 12, color: Colors.blueGrey)) ])),
-                      FittedBox(fit: BoxFit.scaleDown, child: Text('₱${formatPrice(item['price'])}', style: const TextStyle(fontWeight: FontWeight.bold, color: navy, fontSize: 16))),
+                      FittedBox(fit: BoxFit.scaleDown, child: Text('₱${formatPrice(item['price'])}', style: TextStyle(fontWeight: FontWeight.bold, color: adaptiveNavy, fontSize: 16))),
                     ]),
                   ),
                 ),

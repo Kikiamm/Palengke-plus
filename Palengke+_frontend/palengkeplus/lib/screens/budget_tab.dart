@@ -22,12 +22,12 @@ class BudgetCommodityPicker extends StatelessWidget {
   Widget build(BuildContext context) => DropdownButtonFormField<String>(
     key: ValueKey(available.map((item) => item['name'].toString()).join('|')),
     initialValue: null,
-    decoration: const InputDecoration(
+    decoration: InputDecoration(
       labelText: 'Add an item',
-      prefixIcon: Icon(Icons.add_shopping_cart),
+      prefixIcon: const Icon(Icons.add_shopping_cart),
       filled: true,
-      fillColor: Colors.white,
-      border: OutlineInputBorder(),
+      fillColor: adaptiveCardBg,
+      border: const OutlineInputBorder(),
     ),
     items: available
         .map(
@@ -214,10 +214,10 @@ class _BudgetTabState extends State<BudgetTab> {
                     ),
                   ),
                   const SizedBox(height: 3),
-                  const Text(
+                  Text(
                     '💰 Budget',
                     style: TextStyle(
-                      color: navy,
+                      color: adaptiveNavy,
                       fontSize: 26,
                       fontWeight: FontWeight.w800,
                     ),
@@ -265,7 +265,7 @@ class _BudgetTabState extends State<BudgetTab> {
             labelText: 'Spending limit',
             prefixText: '₱ ',
             filled: true,
-            fillColor: Colors.white,
+            fillColor: adaptiveCardBg,
             border: OutlineInputBorder(),
             errorText: budgetText.isEmpty || isValidBudgetLimit(budgetText)
                 ? null

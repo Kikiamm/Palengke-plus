@@ -219,9 +219,9 @@ class _HomeTabState extends State<HomeTab> {
         const SizedBox(height: 18),
         Row(
           children: [
-            const Text(
+            Text(
               '🔥 Top Price Movers',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: adaptiveNavy),
             ),
             const Spacer(),
             const Icon(Icons.schedule, size: 15, color: Colors.blueGrey),
@@ -230,7 +230,7 @@ class _HomeTabState extends State<HomeTab> {
               latestDate == null
                   ? 'Publication date unavailable'
                   : 'As of ${displayDate(latestDate)}',
-              style: TextStyle(fontSize: 12, color: Colors.blueGrey),
+              style: TextStyle(fontSize: 12, color: adaptiveSubtext),
             ),
           ],
         ),
@@ -247,14 +247,14 @@ class _HomeTabState extends State<HomeTab> {
         const SizedBox(height: 20),
         Row(
           children: [
-            const Text(
+            Text(
               'All Commodities',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: adaptiveNavy),
             ),
             const Spacer(),
             Text(
               '${items.length} items',
-              style: const TextStyle(color: Colors.blueGrey),
+              style: TextStyle(color: adaptiveSubtext),
             ),
           ],
         ),
@@ -356,12 +356,12 @@ class _HomeTabState extends State<HomeTab> {
                     titleCase(item['name']),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: adaptiveNavy),
                   ),
                   Text(
                     '₱${formatPrice(item['latest_price'])} ${item['unit']}',
-                    style: const TextStyle(
-                      color: Colors.blueGrey,
+                    style: TextStyle(
+                      color: adaptiveSubtext,
                       fontSize: 12,
                     ),
                   ),
@@ -393,7 +393,7 @@ class _HomeTabState extends State<HomeTab> {
                 width: 38,
                 height: 38,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE8F1E7),
+                  color: adaptiveChipBg,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -419,8 +419,8 @@ class _HomeTabState extends State<HomeTab> {
                       '${item['category']} · ${item['data_points']} days',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.blueGrey,
+                      style: TextStyle(
+                        color: adaptiveSubtext,
                         fontSize: 12,
                       ),
                     ),
@@ -438,13 +438,14 @@ class _HomeTabState extends State<HomeTab> {
                       fit: BoxFit.scaleDown,
                       child: Text(
                         '₱${formatPrice(item['latest_price'])} / kg',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w800,
                           fontSize: 14,
+                          color: adaptiveNavy,
                         ),
                       ),
                     ),
-                    if(item['per_piece_estimate']!=null) FittedBox(fit: BoxFit.scaleDown, child: Text(perPieceLabel(item['name'].toString(), item['latest_price']), style: const TextStyle(color: Colors.blueGrey, fontSize: 10, fontWeight: FontWeight.w600))),
+                    if(item['per_piece_estimate']!=null) FittedBox(fit: BoxFit.scaleDown, child: Text(perPieceLabel(item['name'].toString(), item['latest_price']), style: TextStyle(color: adaptiveSubtext, fontSize: 10, fontWeight: FontWeight.w600))),
                     const SizedBox(height: 3),
                     _deltaChip(delta),
                     if (forecast)

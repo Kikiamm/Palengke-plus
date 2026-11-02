@@ -161,7 +161,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
         children: [
           Icon(icon, color: green, size: 20),
           const SizedBox(height: 8),
-          Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: navy)),
+          Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: adaptiveNavy)),
           Text(label, style: const TextStyle(fontSize: 12, color: Colors.blueGrey)),
         ],
       ),
@@ -176,7 +176,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: line),
+        side: BorderSide(color: adaptiveLine),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -192,7 +192,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
         ),
         title: Text(
           titleCase(item['commodity']),
-          style: const TextStyle(fontWeight: FontWeight.bold, color: navy),
+          style: TextStyle(fontWeight: FontWeight.bold, color: adaptiveNavy),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +211,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
               children: [
                 Text(
                   '₱${formatPrice(item['price'])}',
-                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: navy),
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: adaptiveNavy),
                 ),
                 Text(
                   isPiece ? 'per piece' : unitLabel(u),
@@ -293,7 +293,7 @@ class _VendorDashboardState extends State<VendorDashboard> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Add New Price', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: navy)),
+                  Text('Add New Price', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: adaptiveNavy)),
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     initialValue: selectedComm,

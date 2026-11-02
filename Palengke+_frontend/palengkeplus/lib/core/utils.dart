@@ -130,9 +130,9 @@ String displayDate(String value) {
 }
 
 BoxDecoration cardDecoration() => BoxDecoration(
-  color: Colors.white,
+  color: adaptiveCardBg,
   borderRadius: BorderRadius.circular(12),
-  border: Border.all(color: line),
+  border: Border.all(color: adaptiveLine),
 );
 Widget errorState(String message, VoidCallback retry) => Center(
   child: Padding(

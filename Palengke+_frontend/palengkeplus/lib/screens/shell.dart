@@ -79,24 +79,46 @@ class PalengkePlusApp extends StatelessWidget {
             useMaterial3: true,
             brightness: Brightness.dark,
             scaffoldBackgroundColor: canvasDark,
+            cardColor: cardDark,
+            canvasColor: canvasDark,
+            cardTheme: CardThemeData(
+              color: cardDark,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(color: lineDark),
+              ),
+            ),
             colorScheme: ColorScheme.fromSeed(
               seedColor: green,
               brightness: Brightness.dark,
-              primary: green,
+              primary: greenBright,
               secondary: accent,
-              surface: const Color(0xFF1E2822),
+              surface: cardDark,
+              onSurface: Colors.white,
+              onPrimary: Colors.white,
             ),
-            textTheme: GoogleFonts.nunitoTextTheme(ThemeData.dark().textTheme),
+            textTheme: GoogleFonts.nunitoTextTheme(
+              ThemeData.dark().textTheme.copyWith(
+                bodyLarge: const TextStyle(color: Colors.white),
+                bodyMedium: const TextStyle(color: Colors.white),
+                bodySmall: const TextStyle(color: Color(0xFFA2B6A6)),
+                titleLarge: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                titleMedium: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                titleSmall: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
             dividerColor: lineDark,
+            dividerTheme: const DividerThemeData(color: lineDark, thickness: 1),
             navigationBarTheme: NavigationBarThemeData(
-              backgroundColor: const Color(0xFF161E19),
-              indicatorColor: green.withValues(alpha: 0.3),
+              backgroundColor: const Color(0xFF141C16),
+              indicatorColor: green.withValues(alpha: 0.35),
               height: 66,
               labelTextStyle: WidgetStateProperty.resolveWith(
                 (states) => TextStyle(
                   color: states.contains(WidgetState.selected)
                       ? Colors.white
-                      : Colors.white60,
+                      : const Color(0xFFA2B6A6),
                   fontSize: 11,
                   fontWeight: states.contains(WidgetState.selected)
                       ? FontWeight.w700
@@ -106,7 +128,8 @@ class PalengkePlusApp extends StatelessWidget {
             ),
             inputDecorationTheme: InputDecorationTheme(
               filled: true,
-              fillColor: const Color(0xFF1E2822),
+              fillColor: cardDark,
+              hintStyle: const TextStyle(color: Color(0xFFA2B6A6)),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 14,
                 vertical: 12,
@@ -121,7 +144,7 @@ class PalengkePlusApp extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: green, width: 1.5),
+                borderSide: const BorderSide(color: greenBright, width: 1.5),
               ),
             ),
           ),
@@ -286,8 +309,8 @@ class _ShellState extends State<Shell> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedTab,
         onDestinationSelected: (index) => setState(() => selectedTab = index),
-        backgroundColor: Colors.white,
-        indicatorColor: const Color(0xFFE6F2F4),
+        backgroundColor: adaptiveCardBg,
+        indicatorColor: AppSettings.instance.isDarkMode ? green.withValues(alpha: 0.35) : const Color(0xFFE6F2F4),
         destinations: const [
           NavigationDestination(
             icon: Text('🏠', style: TextStyle(fontSize: 18)),

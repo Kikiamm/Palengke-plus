@@ -192,11 +192,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: line),
-              ),
+              decoration: cardDecoration(),
               child: Row(
                 children: [
                   Expanded(
@@ -327,11 +323,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
             Container(
               height: 260,
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: line),
-              ),
+              decoration: cardDecoration(),
               child: chartSpots.length < 2
                   ? const Center(
                       child: Text('Not enough price points to chart.'),
@@ -402,7 +394,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                           show: true,
                           drawVerticalLine: false,
                           getDrawingHorizontalLine: (_) =>
-                              FlLine(color: line, strokeWidth: 0.8),
+                              FlLine(color: adaptiveLine, strokeWidth: 0.8),
                         ),
                         titlesData: FlTitlesData(
                           rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -416,8 +408,8 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                                   padding: const EdgeInsets.only(right: 6),
                                   child: Text(
                                     '₱${value.toStringAsFixed(0)}',
-                                    style: const TextStyle(
-                                      color: Colors.blueGrey,
+                                    style: TextStyle(
+                                      color: adaptiveSubtext,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -455,8 +447,8 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                                   padding: const EdgeInsets.only(top: 4),
                                   child: Text(
                                     label,
-                                    style: const TextStyle(
-                                      color: Colors.blueGrey,
+                                    style: TextStyle(
+                                      color: adaptiveSubtext,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -473,18 +465,18 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
             const SizedBox(height: 14),
             Row(
               children: [
-                _statCard('30D AVERAGE', '₱${formatPrice(average)}', navy),
+                _statCard('30D AVERAGE', '₱${formatPrice(average)}', adaptiveNavy),
                 const SizedBox(width: 8),
                 _statCard('30D LOW', '₱${formatPrice(low)}', green),
                 const SizedBox(width: 8),
                 _statCard('30D HIGH', '₱${formatPrice(high)}', red),
               ],
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 6),
               child: Text(
                 'History summaries are calculated from the daily series; missing dates may be interpolated.',
-                style: TextStyle(color: Colors.blueGrey, fontSize: 10),
+                style: TextStyle(color: adaptiveSubtext, fontSize: 10),
               ),
             ),
             const SizedBox(height: 18),
@@ -499,8 +491,8 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
             const SizedBox(height: 12),
             Text(
               '${quality['validation_points'] ?? 0} recent prices used to check this forecast · nominal 95% ranges are not coverage guarantees.',
-              style: const TextStyle(
-                color: Colors.blueGrey,
+              style: TextStyle(
+                color: adaptiveSubtext,
                 fontSize: 11,
                 height: 1.4,
               ),
@@ -563,11 +555,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
   Widget _statCard(String label, dynamic value, Color color) => Expanded(
     child: Container(
       padding: const EdgeInsets.all(11),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: line),
-      ),
+      decoration: cardDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -588,7 +576,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
             alignment: Alignment.centerLeft,
             child: Text(
               label,
-              style: const TextStyle(color: Colors.blueGrey, fontSize: 9),
+              style: TextStyle(color: adaptiveSubtext, fontSize: 9),
             ),
           ),
         ],
@@ -599,7 +587,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
     elevation: 0,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(12),
-      side: const BorderSide(color: line),
+      side: BorderSide(color: adaptiveLine),
     ),
     child: Padding(
       padding: const EdgeInsets.all(16),
@@ -612,14 +600,15 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
+                  color: adaptiveNavy,
                 ),
               ),
             ],
           ),
-          const Divider(height: 24),
+          Divider(height: 24, color: adaptiveLine),
           child,
         ],
       ),

@@ -41,10 +41,10 @@ class _ProfileTabState extends State<ProfileTab> {
             fontWeight: FontWeight.w800,
           ),
         ),
-        const Text(
+        Text(
           '👤 Profile',
           style: TextStyle(
-            color: navy,
+            color: adaptiveNavy,
             fontSize: 26,
             fontWeight: FontWeight.w800,
           ),
@@ -140,16 +140,16 @@ class _ProfileTabState extends State<ProfileTab> {
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            side: const BorderSide(color: line),
+            side: BorderSide(color: adaptiveLine),
           ),
           child: Padding(
             padding: const EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Appearance',
-                  style: TextStyle(fontWeight: FontWeight.w800, color: navy),
+                  style: TextStyle(fontWeight: FontWeight.w800, color: adaptiveNavy),
                 ),
                 const SizedBox(height: 8),
                 SwitchListTile(
@@ -182,16 +182,16 @@ class _ProfileTabState extends State<ProfileTab> {
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            side: const BorderSide(color: line),
+            side: BorderSide(color: adaptiveLine),
           ),
           child: Padding(
             padding: const EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Account mode',
-                  style: TextStyle(fontWeight: FontWeight.w800, color: navy),
+                  style: TextStyle(fontWeight: FontWeight.w800, color: adaptiveNavy),
                 ),
                 const SizedBox(height: 8),
                 SegmentedButton<String>(
@@ -215,7 +215,7 @@ class _ProfileTabState extends State<ProfileTab> {
                   widget.role == 'vendor'
                       ? 'Vendor mode active: You can post stall prices and open your Vendor Dashboard.'
                       : 'Consumer mode: View official DA reference prices and market stall offerings.',
-                  style: const TextStyle(color: Colors.blueGrey, fontSize: 12),
+                  style: TextStyle(color: adaptiveSubtext, fontSize: 12),
                 ),
                 if (widget.role == 'vendor') ...[
                   const SizedBox(height: 6),
@@ -292,11 +292,11 @@ class _ProfileTabState extends State<ProfileTab> {
         const SizedBox(height: 16),
         _settingsCard('Preferences', '⚙️', [
           ListTile(
-            leading: const Icon(Icons.dns_outlined, color: navy),
+            leading: const Icon(Icons.dns_outlined, color: greenBright),
             title: const Text('Server connection'),
             subtitle: Text(
               ApiService.activeBaseUrl,
-              style: const TextStyle(fontSize: 11, color: Colors.blueGrey),
+              style: TextStyle(fontSize: 11, color: adaptiveSubtext),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -304,12 +304,12 @@ class _ProfileTabState extends State<ProfileTab> {
             onTap: widget.onSettings,
           ),
           const ListTile(
-            leading: Icon(Icons.language, color: navy),
+            leading: Icon(Icons.language, color: greenBright),
             title: Text('Language'),
             trailing: Text('Filipino / English'),
           ),
           const ListTile(
-            leading: Icon(Icons.info_outline, color: navy),
+            leading: Icon(Icons.info_outline, color: greenBright),
             title: Text('App Version'),
             trailing: Text('v1.0.0'),
           ),
@@ -323,7 +323,7 @@ class _ProfileTabState extends State<ProfileTab> {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: const BorderSide(color: line),
+          side: BorderSide(color: adaptiveLine),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,10 +336,10 @@ class _ProfileTabState extends State<ProfileTab> {
                   const SizedBox(width: 8),
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: navy,
+                      color: adaptiveNavy,
                     ),
                   ),
                 ],
